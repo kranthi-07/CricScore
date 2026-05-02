@@ -1,0 +1,668 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">    <meta http-equiv="Expires" content="0">
+    <title>Cricscore</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="cric-style.css">
+</head>
+
+<body>
+<div id="loader" class="loader-hidden">
+    <div class="ball-loader">
+        <div class="ball-load">
+            <img src="cricketball.png" alt="Loading" />
+        </div>
+        <div class="shadow"></div>
+    </div>
+</div>
+
+
+<div class="popup" id="settingsPopup">
+    <div class="popup-box">
+        <h3>Settings</h3>
+
+        <div class="settings-group">
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Sound Effects</h4>
+                    <p>Enable match sound & vibrations</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="soundToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Dark Mode</h4>
+                    <p>Use dark theme interface</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="darkToggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+        </div>
+
+        <button onclick="closeSettings()">Close</button>
+    </div>
+</div>
+
+<nav class="top-bar">
+
+    <div class="topbar">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div class="logo">
+                <h2><span
+                        style="background:linear-gradient(to top , rgb(255, 255, 255) 10%,rgb(186, 186, 186) 50%,rgb(255, 255, 255) 10%);background-clip: text;color:transparent;position: relative;left:5px">Cric</span>
+                    <img src="cricketball.png" alt=""><span
+                            style="background:linear-gradient(to top , rgb(255, 228, 228) 10%,rgb(255, 60, 60) 50%,rgb(255, 171, 171) 10%);background-clip: text;color:transparent;position: relative;left:-5px;">Score</span>
+                </h2>
+            </div>
+        </div>
+
+        <div class="top-actions">
+            <i class="ri-play-circle-line top-icon" id="resumeMatchBtn"></i>
+            <i class="ri-settings-3-line top-icon" id="settingsBtn"></i>
+        </div>
+    </div>
+
+
+
+</nav>
+
+<div class="matter">
+    <p>Live scoring Cricket App</p>
+</div>
+
+<div class="start-btn">
+
+    <div class="start-match" id="startMatch">
+        <p>Start a Match</p>
+    </div>
+
+    <div class="start-tournment">
+        <p>Start a Tournment</p>
+    </div>
+
+</div>
+
+<div class="career">
+    <h2>My Career</h2>
+    <div class="tabs">
+    </div>
+</div>
+
+
+<template id="careerScreen">
+
+
+    <div class="overlay-header">
+        <i class="ri-arrow-left-line overlay-back"></i>
+        <h2>Team Career</h2>
+        <button id="clearCareerBtn" class="danger-btn">🗑</button>
+    </div>
+
+
+    <div class="overlay-content" id="careerContent">
+        <!-- Team or Player career cards load here -->
+    </div>
+
+</template>
+
+
+<template id="startMatchScreen">
+    <div class="overlay-header">
+        <i class="ri-arrow-left-line overlay-back"></i>
+        <h2>Start Match</h2>
+    </div>
+    <div class="overlay-content-start">
+
+
+        <div class="select-your-team select">
+            <h2 id="yourTeamTitle" class="select-title">Select your Team<i
+                    class="ri-arrow-down-s-fill arrow-down"></i></h2>
+            <div class="select-options">
+                <p class="add-existing">Add Existing Team</p>
+                <p class="add-new">Add New Team</p>
+            </div>
+        </div>
+
+
+        <div class="select-opponent-team select">
+            <h2 id="opponentTeamTitle" class="select-title">Select Opponent Team<i
+                    class="ri-arrow-down-s-fill arrow-down"></i></h2>
+            <div class="select-options">
+                <p class="add-existing">Add Existing Team</p>
+                <p class="add-new">Add New Team</p>
+            </div>
+        </div>
+
+
+
+
+        <div class="select-overs">
+            <div class="overs">
+                <h2>Overs:</h2>
+                <input type="number">
+
+            </div>
+
+            <div class="quick-overs">
+                <button data-ov="2">2 OV</button>
+                <button data-ov="5">5 OV</button>
+                <button data-ov="10">10 OV</button>
+                <button data-ov="20">20 OV</button>
+            </div>
+
+            <div class="match-preview">
+                <div class="preview-title">🏏 Match Preview</div>
+                <div class="preview-teams" id="previewTeams">
+                    Select Teams
+                </div>
+                <div class="preview-format">
+                    Format: <span id="previewOvers">--</span> Overs
+                </div>
+            </div>
+
+        </div>
+
+        <div class="start-btn" style="width:88%;">
+            <button>Start</button>
+        </div>
+    </div>
+
+</template>
+
+<div id="saveMatchPopup" class="popup">
+    <div class="popup-box">
+        <h3>Save Match?</h3>
+        <p>Do you want to save this match to history?</p>
+        <button onclick="confirmSaveMatch()">Yes, Save</button>
+        <button onclick="discardMatch()">No</button>
+    </div>
+</div>
+
+
+
+<div id="battingChoicePopup" class="popup">
+    <div class="popup-box">
+        <h3 style="color:red;">Who will bat first?</h3>
+        <div class="toss-buttons">
+            <button id="batFirstTeamA"></button>
+            <button id="batFirstTeamB"></button>
+        </div>
+    </div>
+</div>
+
+
+
+
+<template class="live-match" id="liveMatch">
+    <div class="live-header">
+        <i class="ri-arrow-left-line" id="liveBackBtn"
+           style="position:absolute;left:15px;top:18px;font-size:22px;cursor:pointer;"></i>
+        <h2>Match</h2>
+    </div>
+
+
+    <div class="score-card">
+
+        <div class="live-score-card">
+            <div class="score" id="liveScore">
+
+            </div>
+
+            <div class="overs" id="liveOvers">
+
+            </div>
+            <div class="run-rate" id="liveRunrate">
+                RR
+            </div>
+        </div>
+
+        <div class="innings-card">
+
+            <div id="inningsTag" class="innings-tag">1st Innings</div>
+            <div id="targetInfo" class="target-info"></div>
+        </div>
+
+        <div class="this-over-card">
+            <div class="this-over-title">This Over</div>
+            <div id="thisOverTimeline" class="this-over-balls"></div>
+        </div>
+
+
+    </div>
+
+
+    <div class="innings-switch">
+        <div class="innings-slider"></div>
+        <button class="first-innings innings-active">1st Innings</button>
+        <button class="second-innings">2nd Innings</button>
+    </div>
+
+
+
+    <div class="stats-section">
+        <div class="batsman-stats">
+            <h3>Batsmen</h3>
+            <div id="batsmanStatsList"></div>
+        </div>
+
+        <div class="bowler-stats">
+            <h3>Bowlers</h3>
+            <div id="bowlerStatsList"></div>
+        </div>
+    </div>
+
+
+    <div class="live-batsman">
+        <div class="team-label batting-team-label">Batting Team</div>
+        <h3>Batsman</h3>
+        <div class="striker">
+            <div class="batsman-box striker-box">
+                <div class="name">Select Striker</div>
+                <div class="sub"></div>
+            </div>
+        </div>
+
+        <div class="strike-swap-btn" id="swapStrikeBtn">
+            <i class="ri-arrow-left-right-line"></i>
+        </div>
+
+        <div class="non-striker">
+            <div class="batsman-box nonstriker-box">
+                <div class="name">Select Non-Striker</div>
+                <div class="sub"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="live-bowler">
+        <div class="team-label bowling-team-label">Bowling Team</div>
+        <h3>Bowler</h3>
+        <div class="bowler">
+
+        </div>
+    </div>
+
+    <div class="update-score">
+
+        <div class="undo">
+            <p class="undo-p">Undo</p>
+        </div>
+
+        <div class="runs">
+            <p>0</p>
+            <p>1</p>
+            <p>2</p>
+            <p>3</p>
+            <p style="background-color:rgb(0, 98, 255);color:#fff;">4</p>
+            <p style="background: #ff6f00;color:#fff;">6</p>
+            <p>LB</p>
+            <p>NB</p>
+            <p>WB</p>
+            <p>5</p>
+        </div>
+
+        <div class="wicket">
+            <p style="background-color: red;color:#fff">B</p>
+            <p style="background-color: red;color:#fff">C</p>
+            <p style="background-color: red;color:#fff">R</p>
+            <p style="background-color: red;color:#fff">St</p>
+            <p>Rtd</p>
+        </div>
+    </div>
+
+    <div class="total-runs">
+        <div class="zeros">
+            <h3>Total '0's:</h3>
+            <div id="zeros"></div>
+        </div>
+
+        <div class="ones">
+            <h3>Total '1's:</h3>
+            <div id="ones"></div>
+        </div>
+
+        <div class="twos">
+            <h3>Total '2's:</h3>
+            <div id="twos"></div>
+        </div>
+
+        <div class="threes">
+            <h3>Total '3's:</h3>
+            <div id="threes"></div>
+        </div>
+
+        <div class="fours">
+            <h3>Total '4's:</h3>
+            <div id="fours"></div>
+        </div>
+
+        <div class="sixes">
+            <h3>Total '6's:</h3>
+            <div id="sixes"></div>
+        </div>
+
+        <div class="wides">
+            <h3>Total 'WB's:</h3>
+            <div id="wides"></div>
+        </div>
+
+        <div class="byes">
+            <h3>Total 'LB's:</h3>
+            <div id="byes"></div>
+        </div>
+
+        <div class="nobes">
+            <h3>Total 'NB's:</h3>
+            <div id="nobes"></div>
+        </div>
+    </div>
+</template>
+
+
+<div class="popup" id="quitMatchPopup">
+    <div class="popup-box">
+        <h3>Quit Match?</h3>
+        <p>Do you want to quit the match?</p>
+        <button onclick="confirmQuitMatch()">Yes, Quit</button>
+        <button onclick="closeQuitPopup()">Cancel</button>
+    </div>
+</div>
+
+
+<div class="popup" style="z-index:999999" id="popup">
+    <div class="popup-box">
+        <p id="popup-msg"></p>
+        <button onclick="closePopup()">OK</button>
+    </div>
+</div>
+
+
+<div class="popup batsman-popup" id="batsmanPopup">
+    <div class="popup-box">
+
+        <div id="batsmanList"></div>
+        <button onclick="closeBatsmanPopup()">Close</button>
+    </div>
+</div>
+
+
+
+<div class="popup bowler-popup" id="bowlerPopup">
+    <div class="popup-box">
+        <div id="bowlerList"></div>
+        <button onclick="closeBowlerPopup()">Close</button>
+    </div>
+</div>
+
+
+
+
+<div class="popup" id="countdownPopup">
+    <div class="popup-box"
+         style="display: flex;align-items: center;justify-content: center;flex-direction: column;z-index:100000;">
+        <h2>Match Starting</h2>
+        <p id="countdownText">5</p>
+    </div>
+</div>
+
+
+
+
+<div class="players-popup" id="playersPopup">
+    <div class="players-popup-overlay" id="playersPopupOverlay"></div>
+
+    <div class="players-popup-card">
+
+        <!-- HEADER -->
+        <div class="players-popup-header">
+            <h2 id="playersPopupTitle">Edit Team</h2>
+            <i class="ri-close-line" id="closePlayersPopup"></i>
+        </div>
+
+        <!-- BODY -->
+        <div class="players-popup-body">
+
+            <!-- TEAM NAME -->
+            <div class="form-group">
+                <label>Team Name</label>
+                <input type="text" id="popupTeamNameInput" placeholder="Enter team name">
+            </div>
+
+            <!-- ADD PLAYER BUTTON -->
+            <div class="form-group">
+                <button class="add-player-btn" id="openAddPlayerPopup">
+                    Add Player
+                </button>
+            </div>
+
+            <!-- EXISTING PLAYERS LIST -->
+            <div id="popupPlayersList" class="popup-players-list"></div>
+
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="players-popup-footer">
+            <button class="popup-cancel" id="popupCancelBtn">Cancel</button>
+            <button class="popup-save" id="popupSaveBtn">Save Changes</button>
+        </div>
+
+    </div>
+</div>
+
+
+
+<!-- MINI ADD PLAYER POPUP -->
+<!-- MINI ADD PLAYER POPUP -->
+<div class="mini-add-popup" id="miniAddPlayerPopup">
+    <div class="mini-add-card">
+
+        <h3>Add Player</h3>
+
+        <input type="text" id="newPlayerName" placeholder="Player Name">
+
+        <select id="newPlayerRole" class="popup-select">
+            <option value="Batsman">Batsman</option>
+            <option value="Bowler">Bowler</option>
+            <option value="All-rounder">All-rounder</option>
+        </select>
+
+        <select id="newPlayerBatting" class="popup-select">
+            <option value="Right Hand">Right Hand</option>
+            <option value="Left Hand">Left Hand</option>
+        </select>
+
+        <select id="newPlayerBowling" class="popup-select">
+            <option value="None">No Bowling</option>
+            <option value="Fast">Fast</option>
+            <option value="Medium">Medium</option>
+            <option value="Spin">Spin</option>
+        </select>
+
+        <!-- ⭐ NEW TAG RADIO BUTTONS -->
+        <div class="player-tag-radio">
+
+            <label class="tag-radio">
+                <input type="checkbox" class="captain-check">
+                <span class="tag-circle">C</span>
+            </label>
+
+            <label class="tag-radio">
+                <input type="checkbox" class="vice-check">
+                <span class="tag-circle">VC</span>
+            </label>
+
+            <label class="tag-radio">
+                <input type="checkbox" class="wk-check">
+                <span class="tag-circle">WK</span>
+            </label>
+
+        </div>
+
+        <div class="mini-add-actions">
+            <button id="cancelAddPlayer">Cancel</button>
+            <button id="confirmAddPlayer">Add Player</button>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+<template id="createTeamScreen">
+    <div class="overlay-header">
+        <i class="ri-arrow-left-line overlay-back"></i>
+        <h2>Create Team</h2>
+    </div>
+    <div class="overlay-content-create">
+        <div class="input-group">
+            <label>Team Name</label>
+            <input type="text" name="teamname" id="createteamNameInput" placeholder="Enter team name">
+        </div>
+
+        <div class="players-section">
+            <label>Players</label>
+            <div id="createplayersList"></div>
+            <button id="createaddPlayerBtn">+ Add Player</button>
+        </div>
+
+        <button id="createsaveTeamBtn" class="save-team-btn">Save Team</button>
+
+    </div>
+</template>
+
+
+
+
+<footer>
+    <div class="home">
+        <i class="ri-home-6-line active"></i>
+    </div>
+
+    <div class="team">
+        <i class="ri-team-line"></i>
+    </div>
+
+    <div class="history">
+        <i class="ri-history-line"></i>
+    </div>
+
+    <div class="profile">
+        <i class="ri-user-4-line"></i>
+    </div>
+
+
+</footer>
+
+
+<div class="app-overlay" id="appOverlay">
+    <div class="app-overlay-content" id="appOverlayContent"></div>
+</div>
+
+<!-- HOME SCREEN TEMPLATE -->
+<template id="homeScreen">
+    <div class="overlay-header">
+        <h2>Home</h2>
+    </div>
+    <div class="overlay-content">
+        <p style="padding:20px">Welcome back to CricScore 🏏</p>
+    </div>
+</template>
+
+<template id="teamsScreen">
+    <div class="overlay-header">
+        <i class="ri-arrow-left-line overlay-back"></i>
+        <h2>Teams</h2>
+    </div>
+
+    <div class="overlay-content">
+        <div class="teams-header">
+            <button class="create-team-btn" id="createTeamBtn">+ Create Team</button>
+        </div>
+
+        <!-- 🔥 THIS IS IMPORTANT -->
+        <div id="teamsList" class="teams-list"></div>
+    </div>
+</template>
+
+<!-- HISTORY SCREEN TEMPLATE -->
+<template id="historyScreen">
+    <div class="overlay-header">
+        <i class="ri-arrow-left-line overlay-back"></i>
+        <h2>Match History</h2>
+    </div>
+    <div class="overlay-content"
+         style="display: flex;flex-direction: column;align-items: center;justify-content: center;">
+        <p style="padding:20px">Previous matches will show here.</p>
+    </div>
+</template>
+
+<!-- PROFILE SCREEN TEMPLATE -->
+<template id="profileScreen">
+    <div class="overlay-header">
+        <i class="ri-arrow-left-line overlay-back"></i>
+        <h2>Profile</h2>
+    </div>
+
+    <div class="overlay-content profile-container">
+
+        <div class="profile-wrapper">
+            <div class="profile-slider">
+
+                <div class="profile-slide overall-slide"></div>
+
+                <div class="profile-slide teams-slide"></div>
+
+                <div class="profile-slide achievements-slide"></div>
+
+            </div>
+        </div>
+
+        <div class="profile-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+
+    </div>
+</template>
+
+
+
+<div class="popup" id="confirmPopup">
+    <div class="popup-box">
+        <h3 id="confirmTitle">Confirm</h3>
+        <p id="confirmMessage"></p>
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:15px;">
+            <button id="confirmYes" style="background:#d32f2f;color:#fff;">Yes</button>
+            <button id="confirmNo">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="cric-sciprt.js"></script>
+
+</html>
