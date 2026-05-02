@@ -60,7 +60,7 @@ Profile Screen
 
 📦 APK Download
 
-(Add APK link here if available)
+https://github.com/kranthi-07/CricScore/blob/main/app/release/app-release.apk
 
 
 💻 GitHub Repository
