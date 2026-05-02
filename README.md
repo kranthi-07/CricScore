@@ -31,16 +31,31 @@ CricScore is a mobile application designed to manage and update live cricket mat
 
 Home Screen
 
-"Home" (screenshots/home.png)
+![Home](screenshots/home.jpg)
+
+Teams Screen
+
+![Home](screenshots/teams.jpg)
+
+Start Screen
+
+![Home](screenshots/start.jpg)
 
 Score Update Screen
 
-"Score" (screenshots/score.png)
+![Home](screenshots/match.jpg)
 
-Match Stats
+Match End Screen
 
-"Stats" (screenshots/stats.png)
+![Home](screenshots/end.jpg)
 
+History Screen
+
+![Home](screenshots/history.jpg)
+
+Profile Screen 
+
+![Home](screenshots/profile.jpg)
 
 
 📦 APK Download
